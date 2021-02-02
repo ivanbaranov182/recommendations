@@ -16,7 +16,7 @@ export default {
   output: {
     path: path.join(__dirname, '../dist'),
     publicPath: isDevServer ? devServerUrl : './',
-    filename: isDevServer ? '[name].[fullhash].js' : '[name].[contenthash].js',
+    filename: isDevServer ? '[name].[fullhash].js' : '[name].js',
   },
   module: {
     rules: arrayFilterEmpty([
