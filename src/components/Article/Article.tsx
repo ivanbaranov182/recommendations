@@ -1,4 +1,4 @@
-import './Article.scss';
+import './Article.scss'; // TODO css.modules
 
 import React, {FC, useEffect, useRef} from 'react';
 
@@ -6,6 +6,8 @@ import DateIcon from '@images/date.component.svg';
 
 import {getDate, getTime} from '../utils';
 import {ArticleProps} from './types';
+
+const debug = window.location.search.includes('?debug=1');
 
 export const Article: FC<ArticleProps> = ({
   article: {description, domain = 'sm-news.ru', slug, categories, title, published_at, image},
@@ -56,6 +58,12 @@ export const Article: FC<ArticleProps> = ({
           {published_at && getDate(published_at)} в {published_at && getTime(published_at)}
         </div>
         <div className="article__title">{title}</div>
+        {debug && (
+          <>
+            <p>start: {timer.start ? timer.start.toString() : 'null'}</p>
+            <p>total: {timer.total}</p>
+          </>
+        )}
       </div>
     </a>
   );

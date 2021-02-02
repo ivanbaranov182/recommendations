@@ -8,12 +8,12 @@ import {Article} from '../Article';
 import {ArticleStatistic, ArticleType, StatisticData, Timer} from '../Article/types';
 import {getTotalTimerTime} from '../utils';
 
+const debug = window.location.search.includes('?debug=1');
+
 export const ArticleList: FC = () => {
-  const user = localStorage.getItem('crawler-user') || '0166qw0ad6320f06b5bww001d535c3a6re14';
-  const domain = window.location.host;
-  // const domain = 'izhevsk.sm.news';
-  const slug = window.location.pathname;
-  // const slug = 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
+  const user = !debug ? localStorage.getItem('crawler-user') : '0166qw0ad6320f06b5bww001d535c3a6re14';
+  const domain = !debug ? window.location.host : 'izhevsk.sm.news';
+  const slug = !debug ? window.location.pathname : 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
   const articles = useRef<ArticleType[]>([]);
   const [loading, setLoading] = useState(true);
   const notActiveDelay = 10;
