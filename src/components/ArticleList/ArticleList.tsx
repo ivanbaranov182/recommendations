@@ -110,6 +110,11 @@ export const ArticleList: FC = () => {
     api.sendRecommendationStatistic(articleStatistic);
   };
 
+  const sendStatistic = (): void => {
+    const articleStatistic = getStatistics(timerRef.current, articles.current, clickedArticleIndex.current, user, domain, slug);
+    api.sendRecommendationStatistic(articleStatistic, false);
+  };
+
   useEffect(() => {
     window.addEventListener('beforeunload', pageLeave);
     return () => {
@@ -126,7 +131,7 @@ export const ArticleList: FC = () => {
   }
 
   return (
-    <div className="article-list" onClick={() => pageLeave()}>
+    <div className="article-list" onClick={() => debug && sendStatistic()}>
       {articles.current.map((article, index) => (
         <Article
           article={article}

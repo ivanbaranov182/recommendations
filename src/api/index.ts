@@ -18,7 +18,7 @@ export const api = {
       .join('&');
     return fetch(api.getApiUrl(`/recommendations?${queryString}`)).then((res) => res.json());
   },
-  sendRecommendationStatistic: (statisticData: StatisticData): boolean | void => {
+  sendRecommendationStatistic: (statisticData: StatisticData, useBeacon = true): boolean | void => {
     const serializeOptions = {
       indices: true,
       booleansAsIntegers: true,
@@ -31,7 +31,7 @@ export const api = {
       },
       body: JSON.stringify(statisticData),
     };
-    if (api.canBeacon) {
+    if (api.canBeacon && useBeacon) {
       return navigator.sendBeacon(api.getApiUrl('/recommendation-statistics'), data);
     }
     return void fetch(api.getApiUrl('/recommendation-statistics'), opts);
