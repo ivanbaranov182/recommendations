@@ -11,10 +11,6 @@ export const getTime = (dateString: string): string => {
   return `${date.getHours()}:${date.getMinutes()}`;
 };
 
-export const getTotalTimerTime = (timer: Timer): number => {
-  return (timer.total += timer.start ? new Date().getTime() - timer.start.getTime() : 0);
-};
-
 export const getStatistics = (
   timers: Timer[],
   articles: ArticleType[],

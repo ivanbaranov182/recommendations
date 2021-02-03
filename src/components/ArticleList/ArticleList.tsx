@@ -5,15 +5,16 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import {api} from '@src/api';
 
 import {Article} from '../Article';
-import {ArticleStatistic, ArticleType, StatisticData, Timer} from '../Article/types';
-import {getStatistics, getTotalTimerTime} from '../utils';
+import {ArticleType, Timer} from '../Article/types';
+import {getStatistics} from '../utils';
 
-const debug = window.location.search.includes('?debug=1');
+const debug = window.location.search.includes('debug=1');
+const test = window.location.search.includes('test=1');
 
 export const ArticleList: FC = () => {
-  const user = !debug ? localStorage.getItem('crawler-user') : '0166qw0ad6320f06b5bww001d535c3a6re14';
-  const domain = !debug ? window.location.host : 'izhevsk.sm.news';
-  const slug = !debug ? window.location.pathname : 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
+  const user = !test ? localStorage.getItem('crawler-user') : '0166qw0ad6320f06b5bww001d535c3a6re14';
+  const domain = !test ? window.location.host : 'izhevsk.sm.news';
+  const slug = !test ? window.location.pathname : 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
   const articles = useRef<ArticleType[]>([]);
   const [loading, setLoading] = useState(true);
   const notActiveDelay = 10;
