@@ -1,7 +1,23 @@
 .article-list {
+	max-width: 770px;
 	margin: 0 auto;
-	max-width: 880px;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+
+	&__disabled {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: #0000002e;
+
+		&-message {
+			font-size: 1.5rem;
+			padding: 1rem;
+			background: #ffffff;
+			box-shadow: 0 0 10px black;
+		}
+	}
 }

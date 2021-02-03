@@ -19,12 +19,12 @@ export type ArticleProps = {
   observer: any;
   timer: Timer;
   articleClick: (index: number) => void;
-  stop: boolean;
 };
 
 export type Timer = {
   total: number;
   start: Date | null;
+  end: Date | null;
 };
 
 export type ArticleStatistic = {

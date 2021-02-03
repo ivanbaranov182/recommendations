@@ -2,8 +2,6 @@ import './Article.scss'; // TODO css.modules
 
 import React, {FC, useEffect, useRef} from 'react';
 
-import DateIcon from '@images/date.component.svg';
-
 import {getDate, getTime} from '../utils';
 import {ArticleProps} from './types';
 
@@ -15,55 +13,68 @@ export const Article: FC<ArticleProps> = ({
   observer,
   timer,
   articleClick,
-  stop,
 }) => {
-  const ref = useRef(null);
+  const startRef = useRef(null);
+  const endRef = useRef(null);
 
   // Observe and unobserve this paragraph
   useEffect(() => {
-    if (ref) observer.observe(ref.current);
+    if (startRef) observer.observe(startRef.current);
+    if (endRef) observer.observe(endRef.current);
     return () => {
-      if (ref.current) observer.unobserve(ref.current);
+      if (startRef.current) observer.unobserve(startRef.current);
+      if (endRef.current) observer.unobserve(endRef.current);
     };
-  }, [observer, ref]);
+  }, [observer, startRef, endRef]);
 
   const total = timer.total;
 
-  // The paragraph is active when it has a start time
-  const seconds = (total / 1000).toFixed(0);
-
   const handleClick = (): void => articleClick(index);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  const seconds = (total / 1000).toFixed(0);
+
   return (
-    <a className="article" ref={ref} data-id={index} href={'//' + domain + '/' + slug} onClick={handleClick}>
-      <div className="article__image">
-        <picture>
-          {image.webp ? <source srcSet={image.webp} type="image/webp" /> : ''}
-          {image.jpg ? <img src={image.jpg} alt={title} title={title} /> : ''}
-        </picture>
-        <div className="article__categories">
-          {categories.length &&
-            categories.map((category, i) => (
-              <div className="article__category" key={i}>
-                {category}
-              </div>
-            ))}
-        </div>
+    <a className="article" href={'//' + domain + '/' + slug} onClick={handleClick}>
+      <div className="article__observer" ref={startRef} data-id={index} data-position="start">
+        {timer.start ? timer.start.toString() : null}
       </div>
-      <div className="article__bottom">
-        <div className="article__date">
-          <DateIcon className="article__date-icon" />
-          {published_at && getDate(published_at)} в {published_at && getTime(published_at)}
+      <div className="article__wrapper">
+        <div className="article__top">
+          <div className="article__left">
+            <div className="article__date">{published_at && getDate(published_at)}</div>
+            <div className="article__time">{published_at && getTime(published_at)}</div>
+            <div className="article__timer">{seconds} s</div>
+          </div>
+          <div className="article__categories">
+            {categories.length &&
+              categories.map((category, i) => (
+                <div className="article__category" key={i}>
+                  {category}
+                </div>
+              ))}
+          </div>
         </div>
         <div className="article__title">{title}</div>
-        {debug && (
-          <>
-            <p>start: {timer.start ? timer.start.toString() : 'null'}</p>
-            <p>total: {timer.total}</p>
-          </>
-        )}
+        <div className="article__image">
+          <picture>
+            {image.webp ? <source srcSet={image.webp} type="image/webp" /> : ''}
+            {image.jpg ? <img src={image.jpg} alt={title} title={title} /> : ''}
+          </picture>
+        </div>
+        <div className="article__description">{description}</div>
+        <div className="article__content">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est
+          nostrum quidem quod saepe? Aliquid commodi iste laboriosam rem reprehenderit similique voluptatum. Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit. A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est nostrum quidem quod saepe?
+          Aliquid commodi iste laboriosam rem reprehenderit similique voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est nostrum quidem quod saepe? Aliquid commodi iste laboriosam
+          rem reprehenderit similique voluptatum.
+        </div>
+        <div className="article__content-after" />
+        <div className="article__button">Посмотреть новость</div>
+      </div>
+      <div className="article__observer" ref={endRef} data-id={index} data-position="end">
+        {timer.end ? timer.end.toString() : null}
       </div>
     </a>
   );
