@@ -46,12 +46,13 @@ export const Article: FC<ArticleProps> = ({
             {debug && <div className="article__timer">{seconds} s</div>}
           </div>
           <div className="article__categories">
-            {categories.length &&
-              categories.map((category, i) => (
-                <div className="article__category" key={i}>
-                  {category}
-                </div>
-              ))}
+            {categories.length
+              ? categories.map((category, i) => (
+                  <div className="article__category" key={i}>
+                    {category}
+                  </div>
+                ))
+              : ''}
           </div>
         </div>
         <div className="article__title">{title}</div>
