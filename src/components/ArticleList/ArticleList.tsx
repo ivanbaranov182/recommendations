@@ -114,7 +114,7 @@ export const ArticleList: FC = () => {
 
   const pageLeave = (): void => {
     const articleStatistic = getStatistics(timerRef.current, articles.current, clickedArticleIndex.current, user, domain, slug);
-    api.sendRecommendationStatistic(articleStatistic);
+    articleStatistic.data.length && api.sendRecommendationStatistic(articleStatistic);
   };
 
   const sendStatistic = (): void => {
@@ -130,11 +130,6 @@ export const ArticleList: FC = () => {
   }, [articles]);
 
   useEffect(() => {
-    console.log('articles.current', articles.current);
-    console.log(
-      'articles.current.slice(page * VISIBLE_ITEMS, VISIBLE_ITEMS)',
-      articles.current.slice((page - 1) * VISIBLE_ITEMS, page * VISIBLE_ITEMS),
-    );
     setVisibleArticles((visibleArticles) => {
       return [...visibleArticles, ...articles.current.slice((page - 1) * VISIBLE_ITEMS, page * VISIBLE_ITEMS)];
     });
@@ -149,12 +144,8 @@ export const ArticleList: FC = () => {
   }
 
   const next = () => {
-    console.log('curPage', page);
     setPage((page) => page + 1);
   };
-
-  console.log('page', page);
-  // console.log('visibleArticles', visibleArticles);
 
   return (
     <div className="article-list" onClick={() => debug && sendStatistic()}>
