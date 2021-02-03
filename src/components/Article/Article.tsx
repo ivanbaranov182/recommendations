@@ -36,14 +36,14 @@ export const Article: FC<ArticleProps> = ({
   return (
     <a className="article" href={'//' + domain + '/' + slug} onClick={handleClick}>
       <div className="article__observer" ref={startRef} data-id={index} data-position="start">
-        {timer.start ? timer.start.toString() : null}
+        {debug ? (timer.start ? timer.start.toString() : null) : ''}
       </div>
       <div className="article__wrapper">
         <div className="article__top">
           <div className="article__left">
             <div className="article__date">{published_at && getDate(published_at)}</div>
             <div className="article__time">{published_at && getTime(published_at)}</div>
-            <div className="article__timer">{seconds} s</div>
+            {debug && <div className="article__timer">{seconds} s</div>}
           </div>
           <div className="article__categories">
             {categories.length &&
@@ -74,7 +74,7 @@ export const Article: FC<ArticleProps> = ({
         <div className="article__button">Посмотреть новость</div>
       </div>
       <div className="article__observer" ref={endRef} data-id={index} data-position="end">
-        {timer.end ? timer.end.toString() : null}
+        {debug ? (timer.end ? timer.end.toString() : null) : ''}
       </div>
     </a>
   );
