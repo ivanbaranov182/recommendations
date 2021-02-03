@@ -8,6 +8,7 @@ export type ArticleType = {
   domain: string;
   slug: string;
   title: string;
+  body: string;
   categories: string[];
   description: string;
   published_at: string;

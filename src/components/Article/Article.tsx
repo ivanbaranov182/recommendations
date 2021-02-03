@@ -8,7 +8,7 @@ import {ArticleProps} from './types';
 const debug = window.location.search.includes('debug=1');
 
 export const Article: FC<ArticleProps> = ({
-  article: {description, domain = 'sm-news.ru', slug, categories, title, published_at, image},
+  article: {description, domain = 'sm-news.ru', slug, categories, title, published_at, image, body},
   index,
   observer,
   timer,
@@ -63,14 +63,7 @@ export const Article: FC<ArticleProps> = ({
           </picture>
         </div>
         <div className="article__description">{description}</div>
-        <div className="article__content">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est
-          nostrum quidem quod saepe? Aliquid commodi iste laboriosam rem reprehenderit similique voluptatum. Lorem ipsum dolor sit amet,
-          consectetur adipisicing elit. A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est nostrum quidem quod saepe?
-          Aliquid commodi iste laboriosam rem reprehenderit similique voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          A adipisci beatae ea excepturi maxime nesciunt voluptatem. Dolores est nostrum quidem quod saepe? Aliquid commodi iste laboriosam
-          rem reprehenderit similique voluptatum.
-        </div>
+        <div className="article__content" dangerouslySetInnerHTML={{__html: body}} />
         <div className="article__content-after" />
         <div className="article__button">Посмотреть новость</div>
       </div>
