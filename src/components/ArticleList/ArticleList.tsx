@@ -1,6 +1,7 @@
 import './ArticleList.scss';
 
 import React, {FC, useEffect, useRef, useState} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import {api} from '@src/api';
 
@@ -17,6 +18,9 @@ export const ArticleList: FC = () => {
   const slug = !test ? window.location.pathname : 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
   const articles = useRef<ArticleType[]>([]);
   const [loading, setLoading] = useState(true);
+  const VISIBLE_ITEMS = 5;
+  const [visibleArticles, setVisibleArticles] = useState<ArticleType[]>([]);
+  const [page, setPage] = useState(0);
   const notActiveDelay = 10;
   const noActive = useRef(0);
   const [_tick, setTick] = useState<Date | null>(null);
@@ -96,7 +100,10 @@ export const ArticleList: FC = () => {
   const getArticles = (): void => {
     api
       .getRecommendations(user, domain, slug)
-      .then((res) => (articles.current = res.data ?? []))
+      .then((res) => {
+        articles.current = res.data ?? [];
+        setPage((page) => page + 1);
+      })
       .catch((e) => console.log('Fail to load recommendations: ', e))
       .finally(() => setLoading(false));
   };
@@ -122,6 +129,17 @@ export const ArticleList: FC = () => {
     };
   }, [articles]);
 
+  useEffect(() => {
+    console.log('articles.current', articles.current);
+    console.log(
+      'articles.current.slice(page * VISIBLE_ITEMS, VISIBLE_ITEMS)',
+      articles.current.slice((page - 1) * VISIBLE_ITEMS, page * VISIBLE_ITEMS),
+    );
+    setVisibleArticles((visibleArticles) => {
+      return [...visibleArticles, ...articles.current.slice((page - 1) * VISIBLE_ITEMS, page * VISIBLE_ITEMS)];
+    });
+  }, [page]);
+
   if (loading) {
     return <>Loading...</>;
   }
@@ -130,24 +148,39 @@ export const ArticleList: FC = () => {
     return <></>;
   }
 
+  const next = () => {
+    console.log('curPage', page);
+    setPage((page) => page + 1);
+  };
+
+  console.log('page', page);
+  // console.log('visibleArticles', visibleArticles);
+
   return (
     <div className="article-list" onClick={() => debug && sendStatistic()}>
-      {articles.current.map((article, index) => (
-        <Article
-          article={article}
-          index={index}
-          observer={paragraphObserver.current}
-          timer={
-            timerRef.current[index] || {
-              total: 0,
-              start: null,
-              end: null,
+      <InfiniteScroll
+        dataLength={visibleArticles.length}
+        next={next}
+        hasMore={visibleArticles.length !== articles.current.length}
+        loader={<h4>Loading...</h4>}
+      >
+        {visibleArticles.map((article, index) => (
+          <Article
+            article={article}
+            index={index}
+            observer={paragraphObserver.current}
+            timer={
+              timerRef.current[index] || {
+                total: 0,
+                start: null,
+                end: null,
+              }
             }
-          }
-          articleClick={articleClick}
-          key={index}
-        />
-      ))}
+            articleClick={articleClick}
+            key={index}
+          />
+        ))}
+      </InfiniteScroll>
       {debug && stop.current && (
         <div className="article-list__disabled">
           <div className="article-list__disabled-message">Пользователь не активен!</div>
