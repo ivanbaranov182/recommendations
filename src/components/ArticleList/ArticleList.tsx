@@ -127,7 +127,7 @@ export const ArticleList: FC = () => {
   }
 
   if (!articles.current.length) {
-    return <>Список рекомендаций пуст</>;
+    return <></>;
   }
 
   return (

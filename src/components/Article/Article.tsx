@@ -5,7 +5,7 @@ import React, {FC, useEffect, useRef} from 'react';
 import {getDate, getTime} from '../utils';
 import {ArticleProps} from './types';
 
-const debug = window.location.search.includes('?debug=1');
+const debug = window.location.search.includes('debug=1');
 
 export const Article: FC<ArticleProps> = ({
   article: {description, domain = 'sm-news.ru', slug, categories, title, published_at, image},
