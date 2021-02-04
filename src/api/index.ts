@@ -1,39 +1,63 @@
-import {serialize} from 'object-to-formdata';
+import { serialize } from 'object-to-formdata';
 
-import {StatisticData} from '@components/Article/types';
+import { Article, ArticleStatistic } from '@components/crawler/types';
+import { RecommendationStatistic } from '@components/lenta/Article/types';
 
-const {API_URL = 'https://desire-analytics.cf/api/v1'} = process.env;
+const { API_URL = 'https://desire-analytics.cf/api/v1' } = process.env;
 
-export const api = {
-  getApiUrl: (url: string): string => `${API_URL}${url}`,
-  canBeacon: !!navigator.sendBeacon,
-  getRecommendations: (user: string | null, domain: string, slug: string) => {
-    const params: {[index: string]: string | null} = {
-      user,
-      domain: domain,
-      slug,
-    };
-    const queryString = Object.keys(params)
-      .map((key) => key + '=' + params[key])
+export class Api {
+  private static canBeacon = !!navigator.sendBeacon;
+
+  static getApiUrl(url: string): string {
+    return `${API_URL}${url}`;
+  }
+
+  static get<T>(url: string, data: { [index: string]: string | null }): Promise<T> {
+    const queryString = Object.keys(data)
+      .map((key) => key + '=' + data[key])
       .join('&');
-    return fetch(api.getApiUrl(`/recommendations?${queryString}`)).then((res) => res.json());
-  },
-  sendRecommendationStatistic: (statisticData: StatisticData, useBeacon = true): boolean | void => {
-    const serializeOptions = {
-      indices: true,
-      booleansAsIntegers: true,
-    };
-    const data = serialize(statisticData, serializeOptions);
+    return fetch(Api.getApiUrl(`${url}?${queryString}`)).then((res) => res.json());
+  }
+
+  static post(url: string, data: Article | ArticleStatistic | RecommendationStatistic): void {
     const opts: RequestInit = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(statisticData),
+      body: JSON.stringify(data),
     };
-    if (api.canBeacon && useBeacon) {
-      return navigator.sendBeacon(api.getApiUrl('/recommendation-statistics'), data);
-    }
-    return void fetch(api.getApiUrl('/recommendation-statistics'), opts);
-  },
-};
+    void fetch(Api.getApiUrl(url), opts);
+  }
+
+  static sendBeacon(url: string, data: ArticleStatistic | RecommendationStatistic): boolean {
+    const serializeOptions = {
+      indices: true,
+      booleansAsIntegers: true,
+    };
+    const formData = serialize(data, serializeOptions);
+    return navigator.sendBeacon(Api.getApiUrl(url), formData);
+  }
+
+  static sendArticleInfo(article: Article): void {
+    Api.post('/articles', article);
+  }
+
+  static sendArticleStatistic(statistic: ArticleStatistic): boolean {
+    return Api.sendBeacon('/article-statistics', statistic);
+  }
+
+  static getRecommendations<T>(user: string | null, domain: string, slug: string): Promise<T> {
+    const data: { [index: string]: string | null } = {
+      user,
+      domain,
+      slug,
+    };
+    return Api.get('/recommendations', data);
+  }
+
+  static sendRecommendationStatistic(statisticData: RecommendationStatistic, useBeacon = true): boolean | void {
+    if (useBeacon) return Api.sendBeacon('/recommendation-statistics', statisticData);
+    return Api.post('/recommendation-statistics', statisticData);
+  }
+}

@@ -1,13 +1,13 @@
-import './ArticleList.scss';
-
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Twig from 'twig';
 
-import {api} from '@src/api';
+import { Api } from '@src/api';
 
-import {Article} from '../Article';
-import {ArticleType, Timer} from '../Article/types';
-import {getStatistics} from '../utils';
+import { Article } from '../Article';
+import { ArticleType, Timer } from '../Article/types';
+import { getStatistics } from '../utils';
+import styles from './ArticleList.module.scss';
 
 const debug = window.location.search.includes('debug=1');
 const test = window.location.search.includes('test=1');
@@ -46,9 +46,7 @@ export const ArticleList: FC = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      noActive.current = noActive.current + 1;
-    }, 1000);
+    const interval = setInterval(() => (noActive.current = noActive.current + 1), 1000);
     const checkInterval = setInterval(check, 1000);
     return () => {
       clearInterval(interval);
@@ -86,21 +84,19 @@ export const ArticleList: FC = () => {
             start: null,
             end: null,
           };
-
           timerRef.current[id] = {
             ...timer,
             [position]: entry.isIntersecting ? new Date() : null,
           };
         });
       },
-      {threshold: 1},
+      { threshold: 0.01 },
     );
   }, []);
 
   const getArticles = (): void => {
-    api
-      .getRecommendations(user, domain, slug)
-      .then((res) => {
+    Api.getRecommendations(user, domain, slug)
+      .then((res: { data: ArticleType[] }) => {
         articles.current = res.data ?? [];
         setPage((page) => page + 1);
       })
@@ -114,12 +110,12 @@ export const ArticleList: FC = () => {
 
   const pageLeave = (): void => {
     const articleStatistic = getStatistics(timerRef.current, articles.current, clickedArticleIndex.current, user, domain, slug);
-    articleStatistic.data.length && api.sendRecommendationStatistic(articleStatistic);
+    articleStatistic.data.length && Api.sendRecommendationStatistic(articleStatistic);
   };
 
   const sendStatistic = (): void => {
     const articleStatistic = getStatistics(timerRef.current, articles.current, clickedArticleIndex.current, user, domain, slug);
-    api.sendRecommendationStatistic(articleStatistic, false);
+    Api.sendRecommendationStatistic(articleStatistic, false);
   };
 
   useEffect(() => {
@@ -143,12 +139,10 @@ export const ArticleList: FC = () => {
     return <></>;
   }
 
-  const next = () => {
-    setPage((page) => page + 1);
-  };
+  const next = () => setPage((page) => page + 1);
 
   return (
-    <div className="article-list" onClick={() => debug && sendStatistic()}>
+    <div className={styles.articleList} onClick={() => debug && sendStatistic()}>
       <InfiniteScroll
         dataLength={visibleArticles.length}
         next={next}
@@ -173,8 +167,8 @@ export const ArticleList: FC = () => {
         ))}
       </InfiniteScroll>
       {debug && stop.current && (
-        <div className="article-list__disabled">
-          <div className="article-list__disabled-message">Пользователь не активен!</div>
+        <div className={styles.articleListDisabled}>
+          <div className={styles.articleListDisabledMessage}>Пользователь не активен!</div>
         </div>
       )}
     </div>

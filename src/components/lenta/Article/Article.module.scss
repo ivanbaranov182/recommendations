@@ -128,8 +128,11 @@
 
   &__observer {
     padding: 0 30px;
-    //height: 20px;
-    //background: #ff0000;
+
+    &._debug {
+      height: 25px;
+      background: #bdbdbd;
+    }
   }
 
   &__timer {

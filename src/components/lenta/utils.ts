@@ -1,4 +1,4 @@
-import {ArticleStatistic, ArticleType, StatisticData, Timer} from './Article/types';
+import { ArticleStatistic, ArticleType, RecommendationStatistic, Timer } from './Article/types';
 
 export const getDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -18,7 +18,7 @@ export const getStatistics = (
   user: string | null,
   domain: string,
   slug: string,
-): StatisticData => {
+): RecommendationStatistic => {
   const statistics: ArticleStatistic[] = [];
   timers.forEach((timer, index) => {
     const article = articles[index];

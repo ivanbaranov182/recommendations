@@ -17,7 +17,7 @@ export type ArticleType = {
 export type ArticleProps = {
   article: ArticleType;
   index: number;
-  observer: any;
+  observer: IntersectionObserver | null;
   timer: Timer;
   articleClick: (index: number) => void;
 };
@@ -40,6 +40,6 @@ export type ArticleStatistic = {
   reject?: boolean;
 };
 
-export type StatisticData = {
+export type RecommendationStatistic = {
   data: ArticleStatistic[];
 };
