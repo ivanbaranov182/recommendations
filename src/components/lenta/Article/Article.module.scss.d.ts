@@ -3,20 +3,9 @@
 declare namespace ArticleModuleScssNamespace {
   export interface IArticleModuleScss {
     article: string;
-    articleButton: string;
-    articleCategories: string;
-    articleCategory: string;
-    articleContent: string;
-    articleDate: string;
-    articleDescription: string;
-    articleImage: string;
-    articleLeft: string;
     articleObserver: string;
     articleTimer: string;
-    articleTitle: string;
-    articleTop: string;
     articleWrapper: string;
-    debug: string;
   }
 }
 

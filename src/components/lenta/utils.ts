@@ -1,4 +1,7 @@
-import { ArticleStatistic, ArticleType, RecommendationStatistic, Timer } from './Article/types';
+import { Timer } from '@components/crawler/types';
+import { msToSec } from '@components/utils';
+
+import { ArticleStatistic, ArticleType, RecommendationStatistic } from './Article/types';
 
 export const getDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -23,6 +26,7 @@ export const getStatistics = (
   timers.forEach((timer, index) => {
     const article = articles[index];
     const isClickedArticle = index === clickedArticleIndex;
+    if (timer.total > 60000) return;
     if (timer.total || isClickedArticle) {
       statistics.push({
         user,
@@ -30,7 +34,7 @@ export const getStatistics = (
         slug: article.slug,
         parent_domain: domain,
         parent_slug: slug,
-        time: timer.total,
+        time: msToSec(timer.total),
         index,
         click: isClickedArticle,
         reject: !isClickedArticle && Boolean(timer.start),

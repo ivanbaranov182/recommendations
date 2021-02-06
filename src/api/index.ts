@@ -5,6 +5,14 @@ import { RecommendationStatistic } from '@components/lenta/Article/types';
 
 const { API_URL = 'https://desire-analytics.cf/api/v1' } = process.env;
 
+const getScriptVersion = () => {
+  const scriptPath = document.currentScript ? document.currentScript.getAttribute('src') : null;
+  const params = scriptPath?.match(/ver=.*/);
+  return params ? params[0].replace('ver=', '') : null;
+};
+
+const scriptVersion = getScriptVersion();
+
 export class Api {
   private static canBeacon = !!navigator.sendBeacon;
 
@@ -19,7 +27,8 @@ export class Api {
     return fetch(Api.getApiUrl(`${url}?${queryString}`)).then((res) => res.json());
   }
 
-  static post(url: string, data: Article | ArticleStatistic | RecommendationStatistic): void {
+  static post(url: string, data: Article | ArticleStatistic | RecommendationStatistic): Promise<Response> {
+    data.scriptVersion = scriptVersion;
     const opts: RequestInit = {
       method: 'POST',
       headers: {
@@ -27,10 +36,11 @@ export class Api {
       },
       body: JSON.stringify(data),
     };
-    void fetch(Api.getApiUrl(url), opts);
+    return fetch(Api.getApiUrl(url), opts);
   }
 
   static sendBeacon(url: string, data: ArticleStatistic | RecommendationStatistic): boolean {
+    data.scriptVersion = scriptVersion;
     const serializeOptions = {
       indices: true,
       booleansAsIntegers: true,
@@ -39,8 +49,8 @@ export class Api {
     return navigator.sendBeacon(Api.getApiUrl(url), formData);
   }
 
-  static sendArticleInfo(article: Article): void {
-    Api.post('/articles', article);
+  static sendArticleInfo(article: Article): Promise<Response> {
+    return Api.post('/articles', article);
   }
 
   static sendArticleStatistic(statistic: ArticleStatistic): boolean {
@@ -56,7 +66,7 @@ export class Api {
     return Api.get('/recommendations', data);
   }
 
-  static sendRecommendationStatistic(statisticData: RecommendationStatistic, useBeacon = true): boolean | void {
+  static sendRecommendationStatistic(statisticData: RecommendationStatistic, useBeacon = true): Promise<Response> | boolean {
     if (useBeacon) return Api.sendBeacon('/recommendation-statistics', statisticData);
     return Api.post('/recommendation-statistics', statisticData);
   }

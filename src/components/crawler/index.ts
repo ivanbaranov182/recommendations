@@ -1,3 +1,3 @@
-import { Crawler } from './Crawler';
+import { App } from './App';
 
-new Crawler();
+new App();

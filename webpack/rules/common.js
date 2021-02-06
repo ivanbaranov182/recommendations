@@ -1,4 +1,4 @@
-import {babelLoader} from './useLoaderRuleItems';
+import { babelLoader } from './useLoaderRuleItems';
 
 /**
  * @see https://webpack.js.org/guides/typescript/#loader
@@ -42,4 +42,16 @@ export const imagesRule = {
 export const fontsRule = {
   test: /\.(woff(2)?|eot|ttf|otf|)$/,
   type: 'asset/inline',
+};
+
+export const textRule = {
+  test: /\.txt$/i,
+  use: [
+    {
+      loader: 'raw-loader',
+      options: {
+        esModule: true,
+      },
+    },
+  ],
 };

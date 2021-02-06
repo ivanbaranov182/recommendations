@@ -1,3 +1,5 @@
+import { Timer } from '@components/crawler/types';
+
 export type ArticleImage = {
   jpg: string;
   webp: string;
@@ -14,18 +16,16 @@ export type ArticleType = {
   published_at: string;
 };
 
+export type ArticleViewProps = {
+  article: ArticleType;
+};
+
 export type ArticleProps = {
   article: ArticleType;
   index: number;
   observer: IntersectionObserver | null;
   timer: Timer;
   articleClick: (index: number) => void;
-};
-
-export type Timer = {
-  total: number;
-  start: Date | null;
-  end: Date | null;
 };
 
 export type ArticleStatistic = {
@@ -42,4 +42,5 @@ export type ArticleStatistic = {
 
 export type RecommendationStatistic = {
   data: ArticleStatistic[];
+  scriptVersion?: string | null;
 };

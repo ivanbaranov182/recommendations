@@ -1,0 +1,4 @@
+<div class='article'>
+    <h2>Title</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab dolorem ex, fuga libero necessitatibus non? Accusantium alias atque consequuntur culpa eligendi, fuga fugiat impedit ipsum non numquam sit ullam veritatis.</p>
+</div>

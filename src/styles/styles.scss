@@ -1,0 +1,12 @@
+.js-observer-start,
+.js-observer-end, {
+  &._debug {
+    padding: 0 30px;
+    height: 25px;
+    background: #bdbdbd;
+  }
+}
+
+.total-timer {
+  color: red;
+}

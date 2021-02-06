@@ -11,6 +11,7 @@ export type Article = {
   author_name: string;
   published_at: string;
   edited_at: string;
+  scriptVersion?: string | null;
 };
 
 export type Category = string;
@@ -23,4 +24,11 @@ export type ArticleStatistic = {
   slug: string;
   time: number;
   read: number;
+  scriptVersion?: string | null;
+};
+
+export type Timer = {
+  total: number;
+  start: Date | null;
+  end: Date | null;
 };

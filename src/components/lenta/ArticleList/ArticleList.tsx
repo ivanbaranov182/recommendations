@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Twig from 'twig';
 
 import { Api } from '@src/api';
 
+import { Timer } from '@components/crawler/types';
+import { User } from '@components/crawler/User';
+
 import { Article } from '../Article';
-import { ArticleType, Timer } from '../Article/types';
+import { ArticleType } from '../Article/types';
 import { getStatistics } from '../utils';
 import styles from './ArticleList.module.scss';
 
@@ -13,24 +15,24 @@ const debug = window.location.search.includes('debug=1');
 const test = window.location.search.includes('test=1');
 
 export const ArticleList: FC = () => {
-  const user = !test ? localStorage.getItem('crawler-user') : '0166qw0ad6320f06b5bww001d535c3a6re14';
-  const domain = !test ? window.location.host : 'izhevsk.sm.news';
-  const slug = !test ? window.location.pathname : 'olimpiyskoy-chempionke-aline-zagitovoy-podarili-kvartiru-v-izhevske';
+  const user = !test ? User.getId() : '0166qw0ad6320f06b5bww001d535c3a6re14';
+  const domain = !test ? window.location.host : 'ivanovo.sm.news';
+  const slug = !test ? window.location.pathname : 'v-ivanove-bojcy-rosgvardii-otbili-u-stai-sobak-moloduyu-zhenshhinu-69781-u3t5';
   const articles = useRef<ArticleType[]>([]);
   const [loading, setLoading] = useState(true);
   const VISIBLE_ITEMS = 5;
   const [visibleArticles, setVisibleArticles] = useState<ArticleType[]>([]);
   const [page, setPage] = useState(0);
   const notActiveDelay = 10;
-  const noActive = useRef(0);
+  const noActiveTime = useRef(0);
   const [_tick, setTick] = useState<Date | null>(null);
   const timerRef = useRef<Timer[]>([]);
   const clickedArticleIndex = useRef<number | null>(null);
   const paragraphObserver = useRef<IntersectionObserver>(null);
   const stop = useRef(false);
 
-  const check = () => {
-    if (noActive.current >= notActiveDelay) {
+  const setTotalTime = () => {
+    if (noActiveTime.current >= notActiveDelay) {
       stop.current = true;
     } else if (timerRef.current.length) {
       timerRef.current = timerRef.current.map((timer) => {
@@ -46,8 +48,8 @@ export const ArticleList: FC = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => (noActive.current = noActive.current + 1), 1000);
-    const checkInterval = setInterval(check, 1000);
+    const interval = setInterval(() => (noActiveTime.current = noActiveTime.current + 1), 1000);
+    const checkInterval = setInterval(setTotalTime, 1000);
     return () => {
       clearInterval(interval);
       clearInterval(checkInterval);
@@ -62,11 +64,15 @@ export const ArticleList: FC = () => {
     };
   }, []);
 
-  const clearNoActive = (): number => (noActive.current = 0);
+  const clearNoActive = (): number => (noActiveTime.current = 0);
 
   useEffect(() => {
-    document.onmousemove = clearNoActive;
-    document.onscroll = clearNoActive;
+    window.addEventListener('mousemove', clearNoActive);
+    window.addEventListener('scroll', clearNoActive);
+    return () => {
+      window.removeEventListener('mousemove', clearNoActive);
+      window.removeEventListener('scroll', clearNoActive);
+    };
   }, []);
 
   useEffect(() => {

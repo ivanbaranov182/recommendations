@@ -1,8 +1,8 @@
-import { Parser } from '../Parser';
+import { Info } from '../Info';
 import { Category, ContentImage } from '../types';
 import { formatDate } from '../utils';
 
-export class PropParser extends Parser {
+export class PropInfo extends Info {
   private readonly articleQuery: string;
   private readonly articleBodyEl: HTMLElement | null;
   private readonly articleAuthorEl: HTMLElement | null;
@@ -104,10 +104,12 @@ export class PropParser extends Parser {
   }
 
   get author_id(): string {
-    return this.getElementParam('[itemprop="vatID"]', 'content');
+    return '70968';
+    // return this.getElementParam('[itemprop="vatID"]', 'content');
   }
 
   get author_name(): string {
-    return this.getElementParam('[itemprop="name"]', null);
+    return 'Денис Дычаковский';
+    // return this.getElementParam('[itemprop="name"]', null);
   }
 }

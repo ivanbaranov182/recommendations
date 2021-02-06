@@ -1,0 +1,1 @@
+export { ArticleDefaultView } from './ArticleDefaultView';

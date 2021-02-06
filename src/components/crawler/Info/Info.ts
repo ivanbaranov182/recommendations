@@ -1,6 +1,6 @@
 import { Article, Category, ContentImage } from '../types';
 
-export class Parser {
+export class Info {
   protected removedTags: string[];
   protected readonly rootElement: Document;
 

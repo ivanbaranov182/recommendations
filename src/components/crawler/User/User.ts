@@ -1,4 +1,4 @@
-import { generateUniqueString } from '../utils';
+import { generateUniqueString } from '@components/crawler/utils';
 
 export class User {
   private static storageName = 'crawler-user';
