@@ -1,14 +1,12 @@
 .article {
   display: block;
-  background: #fff;
   text-decoration: none;
   color: inherit;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 
   &__wrapper {
     display: block;
     position: relative;
-    padding: 30px;
   }
 
   &__observer {

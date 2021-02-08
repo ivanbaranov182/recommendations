@@ -1,0 +1,1 @@
+export { ArticleMobileView } from './ArticleMobileView';
