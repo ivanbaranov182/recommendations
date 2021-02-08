@@ -1,17 +1,16 @@
+import { format, parseISO } from 'date-fns';
+
 import { Timer } from '@components/crawler/types';
 import { msToSec } from '@components/utils';
 
 import { ArticleStatistic, ArticleType, RecommendationStatistic } from './Article/types';
 
 export const getDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const tmp = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;
-  return tmp.replace(/(^|\D)(\d)(?!\d)/g, '$10$2');
+  return format(parseISO(dateString), 'yyyy-MM-dd');
 };
 
 export const getTime = (dateString: string): string => {
-  const date = new Date(dateString);
-  return `${date.getHours()}:${date.getMinutes()}`;
+  return format(parseISO(dateString), 'HH:mm');
 };
 
 export const getStatistics = (

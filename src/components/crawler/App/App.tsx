@@ -11,6 +11,7 @@ import { PropInfo } from '../PropInfo';
 import { Article, ArticleStatistic, Timer } from '../types';
 import { User } from '../User';
 import { addElement } from '../utils';
+import styles from './App.module.scss';
 
 export class App {
   private readonly debug: boolean;
@@ -57,9 +58,9 @@ export class App {
     this.noActiveTime = 0;
     this.notActiveDelay = 10;
     if (this.articleEl) {
-      if (this.debug) this.totalTimerEl = addElement(this.articleBodyEl, 'total-timer', true, false);
+      if (this.debug) this.totalTimerEl = addElement(this.articleBodyEl, styles.totalTimer, true, false);
       this.articleStartEl = this.articleEl;
-      this.articleEndEl = addElement(this.articleBodyEl, 'js-observer-end', false, true);
+      this.articleEndEl = addElement(this.articleBodyEl, styles.jsObserverEnd, false, true);
       this.debug && this.addDebugInfo();
       this.initEvents();
     }
@@ -120,7 +121,6 @@ export class App {
         const entry = entries[0];
         // @ts-ignore
         const position = entry.target.dataset.position || 'start';
-        console.log('position', position);
         this.timer[position] = entry.isIntersecting ? new Date() : null;
         if (entry.target === this.articleEndEl && !this.read) {
           // unobserve after read
