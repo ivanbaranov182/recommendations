@@ -104,12 +104,10 @@ export class PropInfo extends Info {
   }
 
   get author_id(): string {
-    return '70968';
-    // return this.getElementParam('[itemprop="vatID"]', 'content');
+    return this.getElementParam('[itemprop="vatID"]', 'content');
   }
 
   get author_name(): string {
-    return 'Денис Дычаковский';
-    // return this.getElementParam('[itemprop="name"]', null);
+    return this.getElementParam('[itemprop="name"]', null);
   }
 }

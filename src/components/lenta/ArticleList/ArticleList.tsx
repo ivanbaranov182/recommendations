@@ -16,8 +16,10 @@ const test = window.location.search.includes('test=1');
 
 export const ArticleList: FC = () => {
   const user = !test ? User.getId() : '0166qw0ad6320f06b5bww001d535c3a6re14';
-  const domain = !test ? window.location.host : 'ivanovo.sm.news';
-  const slug = !test ? window.location.pathname : 'v-ivanove-bojcy-rosgvardii-otbili-u-stai-sobak-moloduyu-zhenshhinu-69781-u3t5';
+  const domain = !test ? window.location.host : 'moscow.sm.news';
+  const slug = !test
+    ? window.location.pathname
+    : 'gotovlyu-zalivnoj-pirog-s-kapustoj-na-kefire-po-receptu-svekrovi-poluchaetsya-neveroyatno-vkusno-domashnie-vsegda-prosyat-dobavki-68425';
   const articles = useRef<ArticleType[]>([]);
   const [loading, setLoading] = useState(true);
   const VISIBLE_ITEMS = 5;
